@@ -1,0 +1,72 @@
+import pandas as pd
+import plotly.express as px
+from dash import Dash, dcc, html
+
+data = {
+    "City": ["Delhi", "Mumbai", "Bangalore", "Chennai", "Kolkata"],
+    "Population": [19000000, 21000000, 12000000, 11000000, 15000000],
+    "Temperature": [32, 30, 27, 31, 29],
+    "Rainfall": [800, 2200, 970, 1400, 1800]
+}
+
+df = pd.DataFrame(data)
+
+fig_bar = px.bar(
+    df,
+    x="City",
+    y="Population",
+    title="Population by City"
+)
+
+fig_scatter = px.scatter(
+    df,
+    x="Temperature",
+    y="Rainfall",
+    size="Population",
+    color="City",
+    title="Temperature vs Rainfall"
+)
+
+fig_line = px.line(
+    df,
+    x="City",
+    y="Temperature",
+    markers=True,
+    title="Temperature by City"
+)
+
+app = Dash(__name__)
+
+app.layout = html.Div([
+    html.H1(
+        "City Data Dashboard",
+        style={"textAlign": "center"}
+    ),
+
+    html.Div([
+        html.H3("Population and Climate Analysis"),
+        html.P(
+            "This dashboard uses Plotly and Dash "
+            "to visualize city population, temperature "
+            "and rainfall data."
+        )
+    ]),
+
+    dcc.Graph(
+        id="population-chart",
+        figure=fig_bar
+    ),
+
+    dcc.Graph(
+        id="temperature-rainfall",
+        figure=fig_scatter
+    ),
+
+    dcc.Graph(
+        id="temperature-chart",
+        figure=fig_line
+    )
+])
+
+if __name__ == "__main__":
+    app.run(debug=True)
