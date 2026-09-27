@@ -1,0 +1,102 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import folium
+
+data = {
+    "City": ["Delhi", "Mumbai", "Bangalore", "Chennai", "Kolkata"],
+    "Population": [19000000, 21000000, 12000000, 11000000, 15000000],
+    "Temperature": [32, 30, 27, 31, 29],
+    "Rainfall": [800, 2200, 970, 1400, 1800]
+}
+
+df = pd.DataFrame(data)
+
+print("Dataset:")
+print(df)
+
+# Matplotlib Bar Chart
+plt.figure(figsize=(8, 5))
+plt.bar(df["City"], df["Population"])
+plt.xlabel("City")
+plt.ylabel("Population")
+plt.title("Population of Different Cities")
+plt.xticks(rotation=45)
+plt.show()
+
+# Matplotlib Line Chart
+plt.figure(figsize=(8, 5))
+plt.plot(df["City"], df["Temperature"], marker="o")
+plt.xlabel("City")
+plt.ylabel("Temperature")
+plt.title("Temperature of Different Cities")
+plt.xticks(rotation=45)
+plt.show()
+
+# Matplotlib Scatter Plot
+plt.figure(figsize=(8, 5))
+plt.scatter(df["Temperature"], df["Rainfall"])
+plt.xlabel("Temperature")
+plt.ylabel("Rainfall")
+plt.title("Temperature vs Rainfall")
+plt.show()
+
+# Seaborn Bar Plot
+plt.figure(figsize=(8, 5))
+sns.barplot(x="City", y="Rainfall", data=df)
+plt.title("Rainfall by City")
+plt.xticks(rotation=45)
+plt.show()
+
+# Seaborn Scatter Plot
+plt.figure(figsize=(8, 5))
+sns.scatterplot(x="Temperature", y="Rainfall", data=df, s=100)
+plt.title("Temperature vs Rainfall")
+plt.show()
+
+# Seaborn Heatmap
+plt.figure(figsize=(7, 5))
+correlation = df[["Population", "Temperature", "Rainfall"]].corr()
+sns.heatmap(correlation, annot=True, cmap="coolwarm")
+plt.title("Correlation Heatmap")
+plt.show()
+
+# Seaborn Histogram
+plt.figure(figsize=(8, 5))
+sns.histplot(df["Temperature"], bins=5, kde=True)
+plt.title("Temperature Distribution")
+plt.xlabel("Temperature")
+plt.show()
+
+# Folium Map
+locations = {
+    "Delhi": [28.6139, 77.2090],
+    "Mumbai": [19.0760, 72.8777],
+    "Bangalore": [12.9716, 77.5946],
+    "Chennai": [13.0827, 80.2707],
+    "Kolkata": [22.5726, 88.3639]
+}
+
+india_map = folium.Map(
+    location=[22.5, 79.0],
+    zoom_start=5
+)
+
+for city, coordinates in locations.items():
+    folium.Marker(
+        location=coordinates,
+        popup=city,
+        tooltip=city
+    ).add_to(india_map)
+
+for city, coordinates in locations.items():
+    folium.CircleMarker(
+        location=coordinates,
+        radius=8,
+        popup=city,
+        tooltip=city,
+        fill=True
+    ).add_to(india_map)
+
+india_map
